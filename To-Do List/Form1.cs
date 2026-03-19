@@ -1,0 +1,85 @@
+using System.Xml.Serialization;
+using System;
+using static Microsoft.VisualBasic.Interaction;
+using System.Windows.Forms;
+using System.IO;
+using System.Text.Json;
+using System.Collections.Generic;
+using System.Drawing;
+
+namespace To_Do_List
+{
+    public partial class Form1 : Form
+    {
+        private readonly string SavePath =
+            Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData),
+                "To-Do List",
+                "tasks.json"
+            );
+
+        private record TaskItem(string Text, bool Checked);
+
+        public Form1()
+        {
+            InitializeComponent();
+            LoadTasks();
+        }
+        protected override void OnFormClosing(FormClosingEventArgs e)
+        {
+            SaveTasks();
+            base.OnFormClosing(e);
+        }
+        
+
+       
+
+        private void btnAdd_Click(object sender, EventArgs e)
+        {
+            cblOutput.Items.Add(InputBox("Enter Task", "Add Task"));
+        }
+
+        private void btnClear_Click(object sender, EventArgs e)
+        {
+            cblOutput.Items.Clear();
+        }
+
+        private void LoadTasks()
+        {
+            try
+            {
+                if (!File.Exists(SavePath)) return;
+                var json = File.ReadAllText(SavePath);
+                var items = JsonSerializer.Deserialize<List<TaskItem>>(json);
+                if (items == null) return;
+                cblOutput.Items.Clear();
+                foreach (var it in items)
+                {
+                    cblOutput.Items.Add(it.Text, it.Checked);
+                }
+            }
+            catch { /* handle/log as needed */ }
+        }
+
+        private void SaveTasks()
+        {
+            try
+            {
+                var dir = Path.GetDirectoryName(SavePath);
+                if (!Directory.Exists(dir)) Directory.CreateDirectory(dir);
+                var items = new List<TaskItem>();
+                for (int i = 0; i < cblOutput.Items.Count; i++)
+                { 
+                    var text = cblOutput.Items[i].ToString();
+                    var isChecked = cblOutput.GetItemChecked(i);
+                    items.Add(new TaskItem(text, isChecked));
+                }
+                var json = JsonSerializer.Serialize(items, new JsonSerializerOptions { WriteIndented = true });
+                File.WriteAllText(SavePath, json);
+            }
+            catch { /* handle/log as needed */ }
+        }
+
+       
+    }
+}
