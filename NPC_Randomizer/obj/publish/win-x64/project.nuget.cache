@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "gIDF7QAcTNQ=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\wyman\\OneDrive\\Documents\\Coding\\Visual Studio\\Projects\\C#\\NPC_Randomizer\\NPC_Randomizer.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\wyman\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.17\\microsoft.netcore.app.runtime.win-x64.8.0.17.nupkg.sha512",
+    "C:\\Users\\wyman\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.17\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.17.nupkg.sha512",
+    "C:\\Users\\wyman\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.17\\microsoft.aspnetcore.app.runtime.win-x64.8.0.17.nupkg.sha512"
+  ],
+  "logs": []
+}

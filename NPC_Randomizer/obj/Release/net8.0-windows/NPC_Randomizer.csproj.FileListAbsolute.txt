@@ -1,0 +1,16 @@
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\bin\Release\net8.0-windows\NPC_Randomizer.exe
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\bin\Release\net8.0-windows\NPC_Randomizer.deps.json
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\bin\Release\net8.0-windows\NPC_Randomizer.runtimeconfig.json
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\bin\Release\net8.0-windows\NPC_Randomizer.dll
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\bin\Release\net8.0-windows\NPC_Randomizer.pdb
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.NPC.resources
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.csproj.GenerateResource.cache
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.AssemblyInfoInputs.cache
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.AssemblyInfo.cs
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.csproj.CoreCompileInputs.cache
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.dll
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\refint\NPC_Randomizer.dll
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.pdb
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\NPC_Randomizer.genruntimeconfig.cache
+C:\Users\wyman\OneDrive\Documents\Coding\Visual Studio\Projects\C#\NPC_Randomizer\obj\Release\net8.0-windows\ref\NPC_Randomizer.dll
