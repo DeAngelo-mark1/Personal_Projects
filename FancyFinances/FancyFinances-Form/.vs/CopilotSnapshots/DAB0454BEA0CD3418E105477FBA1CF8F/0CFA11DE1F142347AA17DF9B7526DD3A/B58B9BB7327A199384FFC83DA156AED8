@@ -1,0 +1,15 @@
+﻿using System;
+
+namespace FancyFinances_Form.Models
+{
+    public class Budget
+    {
+        public int BudgetID { get; set; }
+        public decimal? Savings { get; set; }
+        public decimal? Expenses { get; set; }
+        public decimal? Income { get; set; }
+        // Foreign key to Users for one-to-one relationship
+        public int? UserID { get; set; }
+        public Users? User { get; set; }
+    }
+}

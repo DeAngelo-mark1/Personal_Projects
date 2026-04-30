@@ -1,0 +1,63 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.ApplicationServices;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using FancyFinances_Form.Models;
+
+namespace FancyFinances_Form
+{
+    public class AppDbContext : DbContext 
+    {
+        public AppDbContext (DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+
+        public DbSet<Users> Users { get; set; }
+        public DbSet<Budget> Budgets { get; set; }
+        public DbSet<Goals> Goals { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Users>(entity =>
+            {
+                entity.ToTable("Users");
+                entity.HasKey(e => e.UserID);
+                entity.Property(e => e.Name).HasColumnType("nchar(35)").IsRequired();
+                entity.Property(e => e.Surname).HasColumnType("nchar(50)").IsRequired(false);
+                entity.Property(e => e.Username).HasColumnType("nchar(20)").IsRequired();
+                entity.Property(e => e.Password).HasColumnType("nchar(20)").IsRequired();
+                entity.Property(e => e.PhoneNumber).HasColumnType("nchar(20)").IsRequired(false);
+                entity.Property(e => e.FavouriteAnimal).HasColumnType("nchar(20)").IsRequired(false);
+            });
+
+            modelBuilder.Entity<Budget>(entity =>
+            {
+                entity.ToTable("Budget");
+                entity.HasKey(e => e.BudgetID);
+                entity.Property(e => e.Savings).HasColumnType("money").IsRequired(false);
+                entity.Property(e => e.Expenses).HasColumnType("money").IsRequired(false);
+                entity.Property(e => e.Income).HasColumnType("money").IsRequired();
+                // Configure one-to-one relationship: Users <-> Budget
+                entity.Property(e => e.UserID).HasColumnType("int").IsRequired(false);
+                entity.HasOne(b => b.User)
+                      .WithOne(u => u.Budget)
+                      .HasForeignKey<Budget>(b => b.UserID)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+
+            modelBuilder.Entity<Goals>(entity =>
+            {
+                entity.ToTable("Goals");
+                entity.HasKey(e => e.GoalID);
+                entity.Property( e => e.GoalDescription).HasColumnType("text").IsRequired();
+                entity.Property(e => e.AllocatedAmount).HasColumnType("money").IsRequired();
+                entity.Property(e => e.TargetAmount).HasColumnType("money").IsRequired();
+                entity.Property(e => e.UserID).HasColumnType("int").IsRequired();
+            });
+
+             
+        }
+    }
+}

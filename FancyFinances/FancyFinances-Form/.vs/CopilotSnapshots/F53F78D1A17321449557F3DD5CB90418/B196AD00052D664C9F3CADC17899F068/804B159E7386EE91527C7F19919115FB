@@ -1,0 +1,79 @@
+﻿using Microsoft.EntityFrameworkCore;
+using FancyFinances_Form.Models;
+
+namespace FancyFinances_Form
+{
+    public partial class frmFinance : Form
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private readonly Users _currentUser;
+
+        public frmFinance(IDbContextFactory<AppDbContext> contextFactory, Users user)
+        {
+            InitializeComponent();
+            _contextFactory = contextFactory;
+            _currentUser = user;
+        }
+
+        private void btnSavings_Click(object sender, EventArgs e)
+        {
+            frmSavings SavingsFrm = new frmSavings(_contextFactory, _currentUser);
+            SavingsFrm.Show();
+
+            this.Hide();
+        }
+
+        private async void frmFinance_Load(object sender, EventArgs e)
+        {
+            lblWelcome.Text =
+                $"Welcome, {_currentUser.Name?.Trim()} " +
+                $"{(string.IsNullOrEmpty(_currentUser.Surname) ? "" : " " + _currentUser.Surname.Trim())}!";
+
+            // Create a context on demand and use SumAsync. Use UserID to filter.
+            using var ctx = _contextFactory.CreateDbContext();
+
+            BudgetDisplay("Income");
+            BudgetDisplay("Expenses");
+            BudgetDisplay("Savings");
+        }
+        public async void BudgetDisplay(string type)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+
+            if (type == "Income")
+            {
+                var totalIncome = await ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Income ?? 0m)
+                .SumAsync();
+
+                btnIncome.Text = "Total Savings: R" + totalIncome.ToString("N2");
+            }
+            else if (type == "Expenses")
+            {
+                var totalExpenses = await ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Expenses ?? 0m)
+                .SumAsync();
+                btnExpenses.Text = "Total Expenses: R" + totalExpenses.ToString("N2");
+            }
+            else if (type == "Savings")
+            {
+                var totalSavings = await ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Savings ?? 0m)
+                .SumAsync();
+                btnSavings.Text = "Total Savings: R" + totalSavings.ToString("N2");
+            }
+            else
+            {
+                MessageBox.Show("Invalid type specified for BudgetDisplay.");
+            }
+        }
+
+        private void btnAddGoal_Click(object sender, EventArgs e)
+        {
+
+        }
+    }
+}

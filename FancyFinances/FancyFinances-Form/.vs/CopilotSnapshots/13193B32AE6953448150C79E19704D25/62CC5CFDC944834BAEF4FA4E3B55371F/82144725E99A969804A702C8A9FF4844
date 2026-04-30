@@ -1,0 +1,42 @@
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.VisualBasic.ApplicationServices;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using FancyFinances_Form.Models;
+
+namespace FancyFinances_Form
+{
+    public class AppDbContext : DbContext 
+    {
+        public AppDbContext (DbContextOptions<AppDbContext> options) : base(options)
+        {
+        }
+        public DbSet<Users> Users {  get; set; }
+        public DbSet<Accounts> Accounts { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Users>(entity =>
+            {
+                entity.HasKey(e => e.UserId);
+                entity.Property(e => e.Username).IsRequired();
+                entity.Property(e => e.Password).IsRequired(false);
+            });
+
+            modelBuilder.Entity<Accounts>(entity =>
+            {
+                entity.HasKey(e => e.BudgetId);
+                entity.Property(e => e.Name).IsRequired();
+                entity.Property(e => e.Balance).HasColumnType("decimal(18,2)");
+
+                entity.HasOne(a => a.User)
+                      .WithMany()
+                      .HasForeignKey(a => a.UsersId)
+                      .OnDelete(DeleteBehavior.Cascade);
+            });
+        }
+    }
+}

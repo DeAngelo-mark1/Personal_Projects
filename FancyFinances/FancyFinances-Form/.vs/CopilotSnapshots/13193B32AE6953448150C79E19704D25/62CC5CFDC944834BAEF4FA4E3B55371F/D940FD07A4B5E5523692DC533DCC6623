@@ -1,0 +1,80 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.EntityFrameworkCore;
+using FancyFinances_Form;
+
+namespace FancyFinances_Form
+{
+    public partial class frmLogin : Form
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+
+        public frmLogin(IDbContextFactory<AppDbContext> contextFactory)
+        {
+            InitializeComponent();
+            _contextFactory = contextFactory;
+        }
+
+        private async Task llbForgotPass_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            //Has functionality
+            if (e.Link != null)
+            {
+                MessageBox.Show("Password recovery is not implemented yet.");
+            }
+            //Fetches the favourite animal
+            string favouriteAnimal = Microsoft.VisualBasic.Interaction.InputBox("To reset password, enter your favourite animal:", "Password Recovery", "");
+
+            //makes sure it has a value
+            if (string.IsNullOrWhiteSpace(favouriteAnimal)) return;
+
+            try
+            {
+                //Creates a new context 
+                using var ctx = _contextFactory.CreateDbContext();
+
+                //Checks if the username and favourite animal match
+                var match = await ctx.Users.FirstOrDefaultAsync(u => u.Username.Trim() == txtUsername.Text && u.FavouriteAnimal.Trim() == favouriteAnimal);
+
+                if (match == null)
+                {
+                    MessageBox.Show("No matching account found.");
+                    return;
+
+                }
+                //Gets the new password
+                var newPassword = Microsoft.VisualBasic.Interaction.InputBox("Enter your new password:", "Reset Password", "");
+                if (string.IsNullOrWhiteSpace(newPassword)) return;
+
+                match.Password = newPassword.Trim();
+                await ctx.SaveChangesAsync();
+
+                MessageBox.Show("Password reset successful!");
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+
+        private async void frmLogin_Load(object sender, EventArgs e)
+        {
+            try
+            {
+                using var ctx = _contextFactory.CreateDbContext();
+                var canConnect = await ctx.Database.CanConnectAsync();
+                MessageBox.Show(canConnect ? "Connected!" : "Failed!");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error connecting to database: {ex.Message}");
+            }
+        }
+    }
+}

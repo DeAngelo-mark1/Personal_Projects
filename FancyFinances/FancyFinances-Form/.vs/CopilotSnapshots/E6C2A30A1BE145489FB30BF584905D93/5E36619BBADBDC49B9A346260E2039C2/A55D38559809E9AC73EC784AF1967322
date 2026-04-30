@@ -1,0 +1,505 @@
+﻿using FancyFinances_Form.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using System;
+using System.Drawing;
+using System.IO;
+using System.Linq;
+using System.Windows.Forms;
+using Microsoft.VisualBasic;
+
+namespace FancyFinances_Form
+{
+    public partial class frmFinance : Form
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private readonly Users _currentUser;
+        private readonly BudgetHelper _helper;
+        private int _goalCount = 1;
+        private const int MaxLines = 10;
+        private double[] expenseAmounts = new double[100];
+        private double[] incomeAmounts = new double[100];
+        private double[] savingsAmounts = new double[100];
+        private double[] time = new double[100];    
+
+
+        public frmFinance(IDbContextFactory<AppDbContext> contextFactory, Users user)
+        {
+            InitializeComponent();
+            _contextFactory = contextFactory;
+            _currentUser = user;
+            _helper = new BudgetHelper(_contextFactory, _currentUser);
+            // initialize view windows
+            weeklyWindowStart = DateTime.Today.AddDays(-6); // last 7 days
+            monthlyWindowStart = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+            dailyWindowStart = DateTime.Today;
+        }
+
+        private void btnWeeklyPrev_Click(object? sender, EventArgs e)
+        {
+            weeklyWindowStart = weeklyWindowStart.AddDays(-7);
+            PlotWeeklyWindow();
+        }
+
+        private void btnWeeklyNext_Click(object? sender, EventArgs e)
+        {
+            weeklyWindowStart = weeklyWindowStart.AddDays(7);
+            PlotWeeklyWindow();
+        }
+
+        private void btnDailyPrev_Click(object? sender, EventArgs e)
+        {
+            dailyWindowStart = dailyWindowStart.AddDays(-1);
+            PlotDailyWindow();
+        }
+
+        private void btnDailyNext_Click(object? sender, EventArgs e)
+        {
+            dailyWindowStart = dailyWindowStart.AddDays(1);
+            PlotDailyWindow();
+        }
+
+        private void btnMonthlyPrev_Click(object? sender, EventArgs e)
+        {
+            monthlyWindowStart = monthlyWindowStart.AddMonths(-1);
+            PlotMonthlyWindow();
+        }
+
+        private void btnMonthlyNext_Click(object? sender, EventArgs e)
+        {
+            monthlyWindowStart = monthlyWindowStart.AddMonths(1);
+            PlotMonthlyWindow();
+        }
+
+        private DateTime weeklyWindowStart;
+        private DateTime monthlyWindowStart;
+        private DateTime dailyWindowStart;
+
+        //////////////////////////////////Background Logic///////////////////////////////
+        private async void frmFinance_Load(object sender, EventArgs e)
+        {
+            lblWelcome.Text =
+                $"Welcome, {_currentUser.Name?.Trim()} " +
+                $"{(string.IsNullOrEmpty(_currentUser.Surname) ? "" : " " + _currentUser.Surname.Trim())}!";
+
+            // Create a context on demand and use SumAsync. Use UserID to filter.
+            using var ctx = _contextFactory.CreateDbContext();
+
+            SetIncomeButtonText(_helper.BudgetDisplay("Income"));
+            SetExpensesButtonText(_helper.BudgetDisplay("Expenses"));
+            SetSavingsButtonText(_helper.BudgetDisplay("Savings"));
+            // load persisted goals and recent transactions
+            LoadGoals();
+            LoadRecentTransactions();
+
+            timer1.Interval = 1000; // 1 second
+            timer1.Start();
+
+            frpDaily.Plot.XLabel("Hours in the Day");
+            frpDaily.Plot.YLabel("Amount (R)");
+
+            frpWeekly.Plot.XLabel("Day of the Week");
+            frpWeekly.Plot.YLabel("Amount (R)");
+
+            frpMonthly.Plot.XLabel("Months in the year");
+            frpMonthly.Plot.YLabel("Amount (R)");
+
+            frpDaily.Plot.Axes.SetLimits(0, 24, 0, 10000);
+            frpWeekly.Plot.Axes.SetLimits(0, 7, 0, 50000);
+            frpMonthly.Plot.Axes.SetLimits(0, 12, 0, 100000);
+            // initial plots
+            PlotDailyWindow();
+            PlotWeeklyWindow();
+            PlotMonthlyWindow();
+
+
+
+
+        }
+
+        private void PlotDailyWindow()
+        {
+            var start = dailyWindowStart.Date;
+            var end = start.AddDays(1);
+            var txns = _helper.ReadFileTransactions(start, end);
+
+            // group by hour
+            var grouped = txns.GroupBy(t => t.Time.Hour)
+                .ToDictionary(g => g.Key, g => g.Sum(x => (double)x.Amount));
+
+            var xs = new List<double>();
+            var ys = new List<double>();
+            for (int h = 0; h < 24; h++)
+            {
+                xs.Add(h);
+                ys.Add(grouped.TryGetValue(h, out var s) ? s : 0.0);
+            }
+
+            frpDaily.Plot.Clear();
+            frpDaily.Plot.Add.Bar(ys.ToArray());
+            frpDaily.Plot.XTicks(xs.ToArray());
+            frpDaily.Plot.Title($"Daily transactions: {start:yyyy-MM-dd}");
+            frpDaily.Refresh();
+        }
+
+        private void PlotWeeklyWindow()
+        {
+            var start = weeklyWindowStart.Date;
+            var end = start.AddDays(7);
+            var txns = _helper.ReadFileTransactions(start, end);
+
+            var grouped = txns.GroupBy(t => t.Time.Date)
+                .ToDictionary(g => g.Key, g => g.Sum(x => (double)x.Amount));
+
+            var xs = new List<double>();
+            var ys = new List<double>();
+            for (var d = start; d < end; d = d.AddDays(1))
+            {
+                xs.Add(d.ToOADate());
+                ys.Add(grouped.TryGetValue(d, out var s) ? s : 0.0);
+            }
+
+            frpWeekly.Plot.Clear();
+            frpWeekly.Plot.Add.Scatter(xs.ToArray(), ys.ToArray(), markerSize: 6);
+            frpWeekly.Plot.Axes.SetLimits(xs.First(), xs.Last(), 0, double.NaN);
+            frpWeekly.Plot.XAxis.DateTimeFormat(true);
+            frpWeekly.Plot.Title($"Weekly transactions: {start:yyyy-MM-dd} to {end.AddDays(-1):yyyy-MM-dd}");
+            frpWeekly.Refresh();
+        }
+
+        private void PlotMonthlyWindow()
+        {
+            var start = monthlyWindowStart;
+            var end = start.AddMonths(1);
+            var txns = _helper.ReadFileTransactions(start, end);
+
+            var grouped = txns.GroupBy(t => new DateTime(t.Time.Year, t.Time.Month, t.Time.Day))
+                .ToDictionary(g => g.Key, g => g.Sum(x => (double)x.Amount));
+
+            var days = (end - start).Days;
+            var xs = new List<double>();
+            var ys = new List<double>();
+            for (int i = 0; i < days; i++)
+            {
+                var d = start.AddDays(i);
+                xs.Add(d.ToOADate());
+                ys.Add(grouped.TryGetValue(d, out var s) ? s : 0.0);
+            }
+
+            frpMonthly.Plot.Clear();
+            frpMonthly.Plot.Add.Bar(xs.ToArray(), ys.ToArray());
+            frpMonthly.Plot.Axes.SetLimits(xs.First(), xs.Last(), 0, double.NaN);
+            frpMonthly.Plot.XAxis.DateTimeFormat(true);
+            frpMonthly.Plot.Title($"Monthly transactions: {start:yyyy-MM}");
+            frpMonthly.Refresh();
+        }
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            lblToday1.Text = $"Today is {DateTime.Now:dddd, MMMM dd, yyyy, HH:mm:ss}";
+            lblToday2.Text = $"Today is {DateTime.Now:dddd, MMMM dd, yyyy, HH:mm:ss}";
+            lblToday3.Text = $"Today is {DateTime.Now:dddd, MMMM dd, yyyy, HH:mm:ss}";
+            lblToday4.Text = $"Today is {DateTime.Now:dddd, MMMM dd, yyyy, HH:mm:ss}";
+        }
+        private void rtbRecentTransactions_TextChanged(object sender, EventArgs e)
+        {
+            if (rtbRecentTransactions.Lines.Length > MaxLines)
+            {
+                // Convert to list to easily remove the first (oldest) line
+                var lines = rtbRecentTransactions.Lines.ToList();
+                lines.RemoveAt(0);  // Remove oldest line
+
+                rtbRecentTransactions.Lines = lines.ToArray();
+            }
+        }
+        private void rtbTransactions_TextChanged(object sender, EventArgs e)
+        {
+            if (rtbTransactions.Lines.Length > MaxLines)
+            {
+                // Convert to list to easily remove the first (oldest) line
+                var lines = rtbTransactions.Lines.ToList();
+                lines.RemoveAt(0);  // Remove oldest line
+
+                rtbTransactions.Lines = lines.ToArray();
+            }
+        }
+
+        private string GetRecentTransactionsFilePath()
+        {
+            var dir = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "FancyFinances");
+            Directory.CreateDirectory(dir);
+            return Path.Combine(dir, $"recent_{_currentUser.UserID}.txt");
+        }
+        private void LoadRecentTransactions()
+        {
+            try
+            {
+                var path = GetRecentTransactionsFilePath();
+                if (File.Exists(path))
+                {
+                    var lines = File.ReadAllLines(path);
+                    rtbRecentTransactions.Lines = lines;
+                    rtbTransactions.Lines = lines;
+                }
+            }
+            catch
+            {
+                // ignore IO errors for now
+            }
+        }
+        private void SaveRecentTransactions()
+        {
+            try
+            {
+                var path = GetRecentTransactionsFilePath();
+                File.WriteAllLines(path, rtbRecentTransactions.Lines ?? Array.Empty<string>());
+                File.WriteAllLines(path, rtbTransactions.Lines ?? Array.Empty<string>());
+            }
+            catch
+            {
+                // ignore IO errors for now
+            }
+        }
+        public void AddRecentTransaction(string message)
+        {
+            try
+            {
+                if (InvokeRequired) { Invoke(() => AddRecentTransaction(message)); return; }
+                rtbRecentTransactions.AppendText(message);
+                rtbTransactions.AppendText(message);
+                // enforce max-lines & persist
+                SaveRecentTransactions();
+            }
+            catch { }
+        }
+        private void LoadGoals()
+        {
+            try
+            {
+                using var ctx = _contextFactory.CreateDbContext();
+                var goals = ctx.Goals
+                                .Where(g => g.UserID == _currentUser.UserID)
+                                .ToList();
+                foreach (var goal in goals)
+                {
+                    CreateGoalPanelFromGoal(goal);
+                }
+            }
+            catch { }
+        }
+
+        private void CreateGoalPanelFromGoal(Models.Goals goal)
+        {
+            var goalPanel = new Panel
+            {
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D,
+                Size = new Size(796, 67),
+                Margin = new Padding(3)
+            };
+
+            var lbl = new Label
+            {
+                AutoSize = true,
+                Location = new Point(6, 9),
+                Text = $"{goal.GoalDescription} - R{goal.AllocatedAmount:N2} / R{goal.TargetAmount:N2}",
+                Name = $"lblGoal_{_goalCount}"
+            };
+
+            var pgb = new ProgressBar
+            {
+                Location = new Point(6, 37),
+                Size = new Size(782, 23),
+                Name = $"pgbGoal_{_goalCount}",
+                Maximum = 100,
+                Value = 0,
+            };
+
+            var addBtn = new Button
+            {
+                Location = new Point(694, 5),
+                Size = new Size(94, 30),
+                Text = "Add Money",
+                Name = $"btnAdd_{_goalCount}"
+            };
+
+            // attach goal entity to the progressbar so handlers can find it
+            pgb.Tag = goal;
+
+            addBtn.Click += btnAddMoney_Click;
+
+            // set progress
+            int percent = 0;
+            if (goal.TargetAmount > 0)
+            {
+                percent = (int)Math.Min(100, Math.Round((double)(goal.AllocatedAmount / goal.TargetAmount) * 100));
+            }
+            pgb.Value = Math.Max(0, Math.Min(100, percent));
+
+            goalPanel.Controls.Add(lbl);
+            goalPanel.Controls.Add(pgb);
+            goalPanel.Controls.Add(addBtn);
+
+            flpGoals.Controls.Add(goalPanel);
+
+            _goalCount++;
+        }
+
+        ///////////////////////////////////Buttons/////////////////////////////////////
+        private void btnSavings_Click(object sender, EventArgs e)
+        {
+            var savingsFrm = new frmSavings(_contextFactory, _currentUser, this);
+            savingsFrm.Show();
+        }
+
+        private void btnAddGoal_Click(object sender, EventArgs e)
+        {
+            // Ask user for goal information
+            string goalName = Interaction.InputBox("Enter goal name:", "Add Goal", "New Goal");
+            if (string.IsNullOrWhiteSpace(goalName)) return;
+
+            string targetStr = Interaction.InputBox("Enter target amount (e.g. 1000.00):", "Add Goal", "0");
+            if (!decimal.TryParse(targetStr, out decimal target) || target <= 0)
+            {
+                MessageBox.Show("Invalid target amount.");
+                return;
+            }
+
+            // persist goal to database and reuse CreateGoalPanelFromGoal to build UI
+            using (var ctx = _contextFactory.CreateDbContext())
+            {
+                var goalEntity = new Goals
+                {
+                    GoalDescription = goalName,
+                    TargetAmount = target,
+                    AllocatedAmount = 0m,
+                    UserID = _currentUser.UserID
+                };
+                ctx.Goals.Add(goalEntity);
+                ctx.SaveChanges();
+
+                CreateGoalPanelFromGoal(goalEntity);
+            }
+        }
+
+        private void btnAddMoney_Click(object? sender, EventArgs e)
+        {
+            //Tests//
+
+            if (sender is not Button btn)
+                return;
+
+            if (btn.Parent is not Panel parent)
+                return;
+
+            var pgb = parent.Controls.OfType<ProgressBar>().FirstOrDefault();
+            var lbl = parent.Controls.OfType<Label>().FirstOrDefault();
+            if (pgb == null || lbl == null)
+                return;
+
+            if (pgb.Tag is not Goals data)
+                return;
+
+            //Functionality//
+
+            string amountStr = Interaction.InputBox("Enter amount to add:", "Add Money", "0");
+            if (!decimal.TryParse(amountStr, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Invalid amount.");
+                return;
+            }
+
+
+            data.AllocatedAmount += amount;
+
+            int percent = 0;
+            if (data.TargetAmount > 0)
+            {
+                percent = (int)Math.Min(100, Math.Round((double)(data.AllocatedAmount / data.TargetAmount) * 100));
+            }
+
+            pgb.Value = Math.Max(0, Math.Min(100, percent));
+            lbl.Text = $"{data.GoalDescription} - R{data.AllocatedAmount:N2} / R{data.TargetAmount:N2}";
+
+            // persist change to database
+            try
+            {
+                using var ctx = _contextFactory.CreateDbContext();
+                var goalToUpdate = ctx.Goals.Find(data.GoalID);
+                if (goalToUpdate != null)
+                {
+                    goalToUpdate.AllocatedAmount = data.AllocatedAmount;
+                    ctx.SaveChanges();
+                }
+            }
+            catch { }
+
+
+        }
+
+        private void btnExpenses_Click(object sender, EventArgs e)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+            var time = DateTime.Now;
+
+            var amount = (int)(Interaction
+                .InputBox("Enter amount to add to expenses:", "Add an Expense", "0").Trim() is string input && decimal
+                .TryParse(input, out decimal inpAmount) && inpAmount > 0 ? inpAmount : 0);
+            var desc = Interaction
+                .InputBox("Enter a description for this transaction:", "Transaction Description", "No description").Trim();
+
+
+
+
+            var msg = _helper.AddInOrOut("Expenses", amount, desc, time);
+            AddRecentTransaction(msg);
+            SetExpensesButtonText(_helper.BudgetDisplay("Expenses"));
+            SaveRecentTransactions();
+            ctx.SaveChanges();
+            // refresh plots
+            PlotDailyWindow();
+            PlotWeeklyWindow();
+            PlotMonthlyWindow();
+
+
+        }
+
+        private void btnIncome_Click(object sender, EventArgs e)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+            var time = DateTime.Now;
+
+            var amount = (int)(Interaction
+                .InputBox("Enter amount to add to income:", "Add Income", "0").Trim() is string input && decimal
+                .TryParse(input, out decimal inpAmount) && inpAmount > 0 ? inpAmount : 0);
+            var desc = Interaction
+                .InputBox("Enter a description for this transaction:", "Transaction Description", "No description").Trim();
+
+            var msg = _helper.AddInOrOut("Income", amount, desc, time);
+            AddRecentTransaction(msg);
+            SetIncomeButtonText(_helper.BudgetDisplay("Income"));
+            SaveRecentTransactions();
+            ctx.SaveChanges();
+            PlotDailyWindow();
+            PlotWeeklyWindow();
+            PlotMonthlyWindow();
+        }
+
+        ///////////////////////////Button Setters//////////////////////////////////////
+        public void SetIncomeButtonText(decimal amount)
+        {
+            btnIncome.Text = $"Income: R{amount:N2}";
+        }
+        public void SetExpensesButtonText(decimal amount)
+        {
+            btnExpenses.Text = $"Expenses: R{amount:N2}";
+        }
+        public void SetSavingsButtonText(decimal amount)
+        {
+            btnSavings.Text = $"Savings: R{amount:N2}";
+
+
+        }
+
+      
+    }
+}

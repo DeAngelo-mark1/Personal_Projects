@@ -1,0 +1,173 @@
+﻿using System;
+using System.Drawing;
+using System.Linq;
+using System.Windows.Forms;
+using Microsoft.EntityFrameworkCore;
+using FancyFinances_Form.Models;
+
+namespace FancyFinances_Form
+{
+    public partial class frmFinance : Form
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private readonly Users _currentUser;
+        private int _goalCount = 1;
+
+        public frmFinance(IDbContextFactory<AppDbContext> contextFactory, Users user)
+        {
+            InitializeComponent();
+            _contextFactory = contextFactory;
+            _currentUser = user;
+        }
+
+        private void btnSavings_Click(object sender, EventArgs e)
+        {
+            frmSavings SavingsFrm = new frmSavings(_contextFactory, _currentUser);
+            SavingsFrm.Show();
+
+            this.Hide();
+        }
+
+        private async void frmFinance_Load(object sender, EventArgs e)
+        {
+            lblWelcome.Text =
+                $"Welcome, {_currentUser.Name?.Trim()} " +
+                $"{(string.IsNullOrEmpty(_currentUser.Surname) ? "" : " " + _currentUser.Surname.Trim())}!";
+
+            // Create a context on demand and use SumAsync. Use UserID to filter.
+            using var ctx = _contextFactory.CreateDbContext();
+
+            BudgetDisplay("Income");
+            BudgetDisplay("Expenses");
+            BudgetDisplay("Savings");
+            
+        }
+        public async void BudgetDisplay(string type)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+
+            if (type == "Income")
+            {
+                var totalIncome = await ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Income ?? 0m)
+                .SumAsync();
+
+                btnIncome.Text = "Total Savings: R" + totalIncome.ToString("N2");
+            }
+            else if (type == "Expenses")
+            {
+                var totalExpenses = await ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Expenses ?? 0m)
+                .SumAsync();
+                btnExpenses.Text = "Total Expenses: R" + totalExpenses.ToString("N2");
+            }
+            else if (type == "Savings")
+            {
+                var totalSavings = await ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Savings ?? 0m)
+                .SumAsync();
+                btnSavings.Text = "Total Savings: R" + totalSavings.ToString("N2");
+            }
+            else
+            {
+                MessageBox.Show("Invalid type specified for BudgetDisplay.");
+            }
+        }
+
+        private void btnAddGoal_Click(object sender, EventArgs e)
+        {
+            // Ask user for goal information
+            string goalName = Microsoft.VisualBasic.Interaction.InputBox("Enter goal name:", "Add Goal", "New Goal");
+            if (string.IsNullOrWhiteSpace(goalName)) return;
+
+            string targetStr = Microsoft.VisualBasic.Interaction.InputBox("Enter target amount (e.g. 1000.00):", "Add Goal", "0");
+            if (!decimal.TryParse(targetStr, out decimal target) || target <= 0)
+            {
+                MessageBox.Show("Invalid target amount.");
+                return;
+            }
+
+            // Create a new panel representing the goal
+            var goalPanel = new Panel
+            {
+                BackColor = Color.White,
+                BorderStyle = BorderStyle.Fixed3D,
+                Size = new Size(796, 67),
+                Margin = new Padding(3)
+            };
+
+            var lbl = new Label
+            {
+                AutoSize = true,
+                Location = new Point(6, 9),
+                Text = $"{goalName} - R{target:N2}",
+                Name = $"lblGoal_{_goalCount}"
+            };
+
+            var pgb = new ProgressBar
+            {
+                Location = new Point(6, 37),
+                Size = new Size(782, 23),
+                Name = $"pgbGoal_{_goalCount}",
+                Maximum = 100,
+                Value = 0
+            };
+
+            var addBtn = new Button
+            {
+                Location = new Point(694, 5),
+                Size = new Size(94, 30),
+                Text = "Add Money",
+                Name = $"btnAdd_{_goalCount}"
+            };
+
+            // store data
+            pgb.Tag = new GoalData { Name = goalName, Target = target, Saved = 0m };
+
+            addBtn.Click += btnAddMoney_Click;
+
+            goalPanel.Controls.Add(lbl);
+            goalPanel.Controls.Add(pgb);
+            goalPanel.Controls.Add(addBtn);
+
+            // Add to the FlowLayoutPanel
+            flpGoals.Controls.Add(goalPanel);
+
+            _goalCount++;
+        }
+
+        private void btnAddMoney_Click(object? sender, EventArgs e)
+        {
+            if (sender is not Button btn) return; //makes sure the sender is a button, if not, exit
+            if (btn.Parent is not Panel parent) return; //makes sure the button's parent is a panel, if not, exit
+
+            var pgb = parent.Controls.OfType<ProgressBar>().FirstOrDefault();
+            var lbl = parent.Controls.OfType<Label>().FirstOrDefault();
+            if (pgb == null || lbl == null) return; 
+
+            //makes sure the progress bar's tag contains GoalData, if not, exit
+            if (pgb.Tag is not GoalData data) return; 
+
+            string amountStr = Microsoft.VisualBasic.Interaction.InputBox("Enter amount to add:", "Add Money", "0");
+            if (!decimal.TryParse(amountStr, out decimal amount) || amount <= 0)
+            {
+                MessageBox.Show("Invalid amount.");
+                return;
+            }
+
+            data.Saved += amount;
+
+            int percent = 0;
+            if (data.Target > 0)
+            {
+                percent = (int)Math.Min(100, Math.Round((double)(data.Saved / data.Target) * 100));
+            }
+
+            pgb.Value = Math.Max(0, Math.Min(100, percent));
+            lbl.Text = $"{data.Name} - R{data.Saved:N2} / R{data.Target:N2}";
+        }
+    }
+}

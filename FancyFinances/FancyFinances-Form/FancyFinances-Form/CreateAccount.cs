@@ -1,0 +1,72 @@
+﻿using FancyFinances_Form.Models;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.SqlServer;
+using Microsoft.VisualBasic;    
+using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
+using System.Text;
+using System.Windows.Forms;
+
+namespace FancyFinances_Form
+{
+    public partial class frmCreateAcc : Form
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private readonly frmLogin _mainForm;
+        public frmCreateAcc(IDbContextFactory<AppDbContext> contextFactory, frmLogin mainForm)
+        {
+            _contextFactory = contextFactory;
+            _mainForm = mainForm;
+            InitializeComponent();
+
+        }
+
+        private void btnCreateAccount_Click(object sender, EventArgs e)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+
+            string userName = txtUsername.Text;
+            string name = txtName.Text;
+            string surname = txtSurname.Text;
+            string password = txtPassword.Text;
+            string phoneNumber = txtPhoneNum.Text;
+            string favouriteAnimal = txtFavAnimal.Text;
+
+            if (string .IsNullOrWhiteSpace(userName) || string.IsNullOrWhiteSpace(name) || string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(favouriteAnimal))
+            {
+                MessageBox.Show("Please fill in all required fields.");
+                return;
+            }
+            else
+            {
+                var newUser = new Users
+                {
+                    Username = userName,
+                    Name = name,
+                    Surname = surname,
+                    Password = password,
+                    PhoneNumber = phoneNumber,
+                    FavouriteAnimal = favouriteAnimal,
+                    Budget = new Budget
+                    {
+                        Savings = 0,
+                        Expenses = 0,
+                        Income = 0
+                    }
+                };
+
+                ctx.Users.Add(newUser);
+                ctx.SaveChanges(); // EF will insert Users and the related Budget once
+
+                MessageBox.Show("Account created successfully!");
+                _mainForm.Show();
+                this.Close();
+                
+                
+            }
+        }
+    }
+}

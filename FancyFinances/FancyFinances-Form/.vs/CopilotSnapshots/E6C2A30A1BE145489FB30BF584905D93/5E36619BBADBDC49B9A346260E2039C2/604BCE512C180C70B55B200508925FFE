@@ -1,0 +1,530 @@
+﻿namespace FancyFinances_Form
+{
+    partial class frmFinance
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+            tbcPages = new TabControl();
+            tbpSummary = new TabPage();
+            panel2 = new Panel();
+            rtbRecentTransactions = new RichTextBox();
+            label1 = new Label();
+            panel1 = new Panel();
+            lblWelcome = new Label();
+            btnIncome = new Button();
+            btnExpenses = new Button();
+            btnSavings = new Button();
+            tbpGoals = new TabPage();
+            flpGoals = new FlowLayoutPanel();
+            btnAddGoal = new Button();
+            tbpTracking = new TabPage();
+            tbcTracking = new TabControl();
+            tbpMonthly = new TabPage();
+            label4 = new Label();
+            frpMonthly = new ScottPlot.WinForms.FormsPlot();
+            label9 = new Label();
+            lblToday1 = new Label();
+            tbpWeekly = new TabPage();
+            lblToday2 = new Label();
+            label3 = new Label();
+            frpWeekly = new ScottPlot.WinForms.FormsPlot();
+            label8 = new Label();
+            tbpDaily = new TabPage();
+            lblToday3 = new Label();
+            frpDaily = new ScottPlot.WinForms.FormsPlot();
+            label2 = new Label();
+            label6 = new Label();
+            tbpTranHistory = new TabPage();
+            lblToday4 = new Label();
+            label5 = new Label();
+            rtbTransactions = new RichTextBox();
+            label7 = new Label();
+            toolTip1 = new ToolTip(components);
+            timer1 = new System.Windows.Forms.Timer(components);
+            tbcPages.SuspendLayout();
+            tbpSummary.SuspendLayout();
+            panel2.SuspendLayout();
+            panel1.SuspendLayout();
+            tbpGoals.SuspendLayout();
+            tbpTracking.SuspendLayout();
+            tbcTracking.SuspendLayout();
+            tbpMonthly.SuspendLayout();
+            tbpWeekly.SuspendLayout();
+            tbpDaily.SuspendLayout();
+            tbpTranHistory.SuspendLayout();
+            SuspendLayout();
+            // 
+            // tbcPages
+            // 
+            tbcPages.Controls.Add(tbpSummary);
+            tbcPages.Controls.Add(tbpGoals);
+            tbcPages.Controls.Add(tbpTracking);
+            tbcPages.Location = new Point(-4, 0);
+            tbcPages.Name = "tbcPages";
+            tbcPages.SelectedIndex = 0;
+            tbcPages.Size = new Size(807, 456);
+            tbcPages.TabIndex = 0;
+            // 
+            // tbpSummary
+            // 
+            tbpSummary.BackColor = Color.Silver;
+            tbpSummary.Controls.Add(panel2);
+            tbpSummary.Controls.Add(label1);
+            tbpSummary.Controls.Add(panel1);
+            tbpSummary.Controls.Add(btnIncome);
+            tbpSummary.Controls.Add(btnExpenses);
+            tbpSummary.Controls.Add(btnSavings);
+            tbpSummary.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbpSummary.Location = new Point(4, 24);
+            tbpSummary.Name = "tbpSummary";
+            tbpSummary.Padding = new Padding(3);
+            tbpSummary.Size = new Size(799, 428);
+            tbpSummary.TabIndex = 0;
+            tbpSummary.Text = "Summary";
+            // 
+            // panel2
+            // 
+            panel2.BackColor = Color.White;
+            panel2.BorderStyle = BorderStyle.Fixed3D;
+            panel2.Controls.Add(rtbRecentTransactions);
+            panel2.Location = new Point(251, 181);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(545, 241);
+            panel2.TabIndex = 6;
+            // 
+            // rtbRecentTransactions
+            // 
+            rtbRecentTransactions.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            rtbRecentTransactions.Location = new Point(0, 0);
+            rtbRecentTransactions.Name = "rtbRecentTransactions";
+            rtbRecentTransactions.Size = new Size(543, 239);
+            rtbRecentTransactions.TabIndex = 0;
+            rtbRecentTransactions.Text = "";
+            rtbRecentTransactions.TextChanged += rtbRecentTransactions_TextChanged;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(248, 146);
+            label1.Name = "label1";
+            label1.Size = new Size(223, 32);
+            label1.TabIndex = 5;
+            label1.Text = "Recent Transactions";
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.White;
+            panel1.BorderStyle = BorderStyle.Fixed3D;
+            panel1.Controls.Add(lblWelcome);
+            panel1.Location = new Point(3, 6);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(793, 61);
+            panel1.TabIndex = 3;
+            // 
+            // lblWelcome
+            // 
+            lblWelcome.AutoSize = true;
+            lblWelcome.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblWelcome.Location = new Point(9, 20);
+            lblWelcome.Name = "lblWelcome";
+            lblWelcome.Size = new Size(136, 37);
+            lblWelcome.TabIndex = 0;
+            lblWelcome.Text = "Welcome";
+            // 
+            // btnIncome
+            // 
+            btnIncome.Location = new Point(6, 309);
+            btnIncome.Name = "btnIncome";
+            btnIncome.Size = new Size(239, 105);
+            btnIncome.TabIndex = 2;
+            btnIncome.Text = "R0";
+            toolTip1.SetToolTip(btnIncome, "Add a new Income\r\n");
+            btnIncome.UseVisualStyleBackColor = true;
+            btnIncome.Click += btnIncome_Click;
+            // 
+            // btnExpenses
+            // 
+            btnExpenses.Location = new Point(6, 198);
+            btnExpenses.Name = "btnExpenses";
+            btnExpenses.Size = new Size(239, 105);
+            btnExpenses.TabIndex = 1;
+            btnExpenses.Text = "R0";
+            toolTip1.SetToolTip(btnExpenses, "Add a new Expense\r\n");
+            btnExpenses.UseVisualStyleBackColor = true;
+            btnExpenses.Click += btnExpenses_Click;
+            // 
+            // btnSavings
+            // 
+            btnSavings.Location = new Point(6, 85);
+            btnSavings.Name = "btnSavings";
+            btnSavings.Size = new Size(239, 107);
+            btnSavings.TabIndex = 0;
+            btnSavings.Tag = "";
+            btnSavings.Text = "R0";
+            toolTip1.SetToolTip(btnSavings, "Add to Savings Balance");
+            btnSavings.UseVisualStyleBackColor = true;
+            btnSavings.Click += btnSavings_Click;
+            // 
+            // tbpGoals
+            // 
+            tbpGoals.BackColor = Color.Silver;
+            tbpGoals.Controls.Add(flpGoals);
+            tbpGoals.Controls.Add(btnAddGoal);
+            tbpGoals.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbpGoals.Location = new Point(4, 24);
+            tbpGoals.Name = "tbpGoals";
+            tbpGoals.Padding = new Padding(3);
+            tbpGoals.Size = new Size(799, 428);
+            tbpGoals.TabIndex = 1;
+            tbpGoals.Text = "Goals";
+            // 
+            // flpGoals
+            // 
+            flpGoals.AutoScroll = true;
+            flpGoals.BackColor = Color.Silver;
+            flpGoals.BorderStyle = BorderStyle.Fixed3D;
+            flpGoals.FlowDirection = FlowDirection.TopDown;
+            flpGoals.Location = new Point(0, 6);
+            flpGoals.Name = "flpGoals";
+            flpGoals.Size = new Size(796, 388);
+            flpGoals.TabIndex = 0;
+            flpGoals.WrapContents = false;
+            // 
+            // btnAddGoal
+            // 
+            btnAddGoal.Location = new Point(3, 398);
+            btnAddGoal.Name = "btnAddGoal";
+            btnAddGoal.Size = new Size(792, 27);
+            btnAddGoal.TabIndex = 1;
+            btnAddGoal.Text = "Add Goal";
+            btnAddGoal.UseVisualStyleBackColor = true;
+            btnAddGoal.Click += btnAddGoal_Click;
+            // 
+            // tbpTracking
+            // 
+            tbpTracking.BackColor = Color.Silver;
+            tbpTracking.Controls.Add(tbcTracking);
+            tbpTracking.Location = new Point(4, 24);
+            tbpTracking.Name = "tbpTracking";
+            tbpTracking.Padding = new Padding(3);
+            tbpTracking.Size = new Size(799, 428);
+            tbpTracking.TabIndex = 2;
+            tbpTracking.Text = "Tracking";
+            // 
+            // tbcTracking
+            // 
+            tbcTracking.Alignment = TabAlignment.Left;
+            tbcTracking.Controls.Add(tbpMonthly);
+            tbcTracking.Controls.Add(tbpWeekly);
+            tbcTracking.Controls.Add(tbpDaily);
+            tbcTracking.Controls.Add(tbpTranHistory);
+            tbcTracking.Location = new Point(6, 6);
+            tbcTracking.Multiline = true;
+            tbcTracking.Name = "tbcTracking";
+            tbcTracking.SelectedIndex = 0;
+            tbcTracking.Size = new Size(782, 416);
+            tbcTracking.TabIndex = 0;
+            // 
+            // tbpMonthly
+            // 
+            tbpMonthly.BackColor = Color.Silver;
+            tbpMonthly.Controls.Add(label4);
+            tbpMonthly.Controls.Add(frpMonthly);
+            tbpMonthly.Controls.Add(label9);
+            tbpMonthly.Controls.Add(lblToday1);
+            tbpMonthly.ForeColor = Color.Black;
+            tbpMonthly.Location = new Point(27, 4);
+            tbpMonthly.Name = "tbpMonthly";
+            tbpMonthly.Padding = new Padding(3);
+            tbpMonthly.Size = new Size(751, 408);
+            tbpMonthly.TabIndex = 0;
+            tbpMonthly.Text = "Monthly Tracking";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(278, 3);
+            label4.Name = "label4";
+            label4.Size = new Size(216, 32);
+            label4.TabIndex = 4;
+            label4.Text = "Monthly Balances";
+            // 
+            // frpMonthly
+            // 
+            frpMonthly.Location = new Point(6, 73);
+            frpMonthly.Name = "frpMonthly";
+            frpMonthly.Size = new Size(739, 329);
+            frpMonthly.TabIndex = 0;
+            // 
+            // label9
+            // 
+            label9.AutoSize = true;
+            label9.Location = new Point(-27, 26);
+            label9.Name = "label9";
+            label9.Size = new Size(857, 15);
+            label9.TabIndex = 9;
+            label9.Text = "__________________________________________________________________________________________________________________________________________________________________________";
+            // 
+            // lblToday1
+            // 
+            lblToday1.AutoSize = true;
+            lblToday1.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblToday1.Location = new Point(6, 41);
+            lblToday1.Name = "lblToday1";
+            lblToday1.Size = new Size(52, 20);
+            lblToday1.TabIndex = 10;
+            lblToday1.Text = "Today:";
+            // 
+            // tbpWeekly
+            // 
+            tbpWeekly.BackColor = Color.Silver;
+            tbpWeekly.Controls.Add(lblToday2);
+            tbpWeekly.Controls.Add(label3);
+            tbpWeekly.Controls.Add(frpWeekly);
+            tbpWeekly.Controls.Add(label8);
+            tbpWeekly.Location = new Point(27, 4);
+            tbpWeekly.Name = "tbpWeekly";
+            tbpWeekly.Padding = new Padding(3);
+            tbpWeekly.Size = new Size(751, 408);
+            tbpWeekly.TabIndex = 1;
+            tbpWeekly.Text = "Weekly Tracking";
+            // 
+            // lblToday2
+            // 
+            lblToday2.AutoSize = true;
+            lblToday2.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblToday2.Location = new Point(6, 41);
+            lblToday2.Name = "lblToday2";
+            lblToday2.Size = new Size(52, 20);
+            lblToday2.TabIndex = 11;
+            lblToday2.Text = "Today:";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(278, 3);
+            label3.Name = "label3";
+            label3.Size = new Size(202, 32);
+            label3.TabIndex = 4;
+            label3.Text = "Weekly Balances";
+            // 
+            // frpWeekly
+            // 
+            frpWeekly.Location = new Point(6, 73);
+            frpWeekly.Name = "frpWeekly";
+            frpWeekly.Size = new Size(739, 329);
+            frpWeekly.TabIndex = 1;
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Location = new Point(-32, 26);
+            label8.Name = "label8";
+            label8.Size = new Size(857, 15);
+            label8.TabIndex = 9;
+            label8.Text = "__________________________________________________________________________________________________________________________________________________________________________";
+            // 
+            // tbpDaily
+            // 
+            tbpDaily.BackColor = Color.Silver;
+            tbpDaily.Controls.Add(lblToday3);
+            tbpDaily.Controls.Add(frpDaily);
+            tbpDaily.Controls.Add(label2);
+            tbpDaily.Controls.Add(label6);
+            tbpDaily.Location = new Point(27, 4);
+            tbpDaily.Name = "tbpDaily";
+            tbpDaily.Size = new Size(751, 408);
+            tbpDaily.TabIndex = 2;
+            tbpDaily.Text = "Daily Tracking";
+            // 
+            // lblToday3
+            // 
+            lblToday3.AutoSize = true;
+            lblToday3.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblToday3.Location = new Point(6, 39);
+            lblToday3.Name = "lblToday3";
+            lblToday3.Size = new Size(52, 20);
+            lblToday3.TabIndex = 11;
+            lblToday3.Text = "Today:";
+            // 
+            // frpDaily
+            // 
+            frpDaily.Location = new Point(6, 73);
+            frpDaily.Name = "frpDaily";
+            frpDaily.Size = new Size(742, 329);
+            frpDaily.TabIndex = 2;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(278, 3);
+            label2.Name = "label2";
+            label2.Size = new Size(249, 32);
+            label2.TabIndex = 3;
+            label2.Text = "Today's Transactions";
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(-27, 24);
+            label6.Name = "label6";
+            label6.Size = new Size(857, 15);
+            label6.TabIndex = 8;
+            label6.Text = "__________________________________________________________________________________________________________________________________________________________________________";
+            // 
+            // tbpTranHistory
+            // 
+            tbpTranHistory.BackColor = Color.Silver;
+            tbpTranHistory.Controls.Add(lblToday4);
+            tbpTranHistory.Controls.Add(label5);
+            tbpTranHistory.Controls.Add(rtbTransactions);
+            tbpTranHistory.Controls.Add(label7);
+            tbpTranHistory.Location = new Point(27, 4);
+            tbpTranHistory.Name = "tbpTranHistory";
+            tbpTranHistory.Size = new Size(751, 408);
+            tbpTranHistory.TabIndex = 3;
+            tbpTranHistory.Text = "Transaction History";
+            // 
+            // lblToday4
+            // 
+            lblToday4.AutoSize = true;
+            lblToday4.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblToday4.Location = new Point(3, 39);
+            lblToday4.Name = "lblToday4";
+            lblToday4.Size = new Size(52, 20);
+            lblToday4.TabIndex = 12;
+            lblToday4.Text = "Today:";
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Segoe UI", 18F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label5.Location = new Point(278, 3);
+            label5.Name = "label5";
+            label5.Size = new Size(237, 32);
+            label5.TabIndex = 5;
+            label5.Text = "Transaction History";
+            // 
+            // rtbTransactions
+            // 
+            rtbTransactions.Location = new Point(3, 81);
+            rtbTransactions.Name = "rtbTransactions";
+            rtbTransactions.Size = new Size(745, 323);
+            rtbTransactions.TabIndex = 0;
+            rtbTransactions.Text = "";
+            rtbTransactions.TextChanged += rtbTransactions_TextChanged;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(-27, 24);
+            label7.Name = "label7";
+            label7.Size = new Size(857, 15);
+            label7.TabIndex = 9;
+            label7.Text = "__________________________________________________________________________________________________________________________________________________________________________";
+            // 
+            // timer1
+            // 
+            timer1.Tick += timer1_Tick;
+            // 
+            // frmFinance
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Silver;
+            ClientSize = new Size(800, 450);
+            Controls.Add(tbcPages);
+            Name = "frmFinance";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Fancy Finances";
+            Load += frmFinance_Load;
+            tbcPages.ResumeLayout(false);
+            tbpSummary.ResumeLayout(false);
+            tbpSummary.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            tbpGoals.ResumeLayout(false);
+            tbpTracking.ResumeLayout(false);
+            tbcTracking.ResumeLayout(false);
+            tbpMonthly.ResumeLayout(false);
+            tbpMonthly.PerformLayout();
+            tbpWeekly.ResumeLayout(false);
+            tbpWeekly.PerformLayout();
+            tbpDaily.ResumeLayout(false);
+            tbpDaily.PerformLayout();
+            tbpTranHistory.ResumeLayout(false);
+            tbpTranHistory.PerformLayout();
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private TabControl tbcPages;
+        private TabPage tbpSummary;
+        private TabPage tbpGoals;
+        private Button btnIncome;
+        private Button btnExpenses;
+        private Button btnSavings;
+        private Panel panel1;
+        private TabPage tbpTracking;
+        private Label lblWelcome;
+        private Label label1;
+        private FlowLayoutPanel flpGoals;
+        private Button btnAddGoal;
+        private ToolTip toolTip1;
+        private Panel panel2;
+        private RichTextBox rtbRecentTransactions;
+        private TabControl tbcTracking;
+        private TabPage tbpMonthly;
+        private TabPage tbpWeekly;
+        private ScottPlot.WinForms.FormsPlot frpMonthly;
+        private ScottPlot.WinForms.FormsPlot frpWeekly;
+        private TabPage tbpDaily;
+        private ScottPlot.WinForms.FormsPlot frpDaily;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private Label label6;
+        private Label label9;
+        private Label label8;
+        private Label lblToday1;
+        private Label lblToday2;
+        private Label lblToday3;
+        private System.Windows.Forms.Timer timer1;
+        private TabPage tbpTranHistory;
+        private Label lblToday4;
+        private Label label5;
+        private RichTextBox rtbTransactions;
+        private Label label7;
+    }
+}

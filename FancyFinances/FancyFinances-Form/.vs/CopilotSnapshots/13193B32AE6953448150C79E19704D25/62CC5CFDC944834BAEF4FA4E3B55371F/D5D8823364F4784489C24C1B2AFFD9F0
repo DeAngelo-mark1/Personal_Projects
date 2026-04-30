@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace FancyFinances_Form.Models
+{
+    public class Users
+    {
+        public int UserId { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Surname { get; set; } = string.Empty;
+        public string Username { get; set; } = string.Empty;
+        public string Password { get; set; } = string.Empty;
+        public int PhoneNumber { get; set; }
+        public string FavouritAnimal { get; set; } = string.Empty;
+
+        public Accounts Account { get; set; }
+    }
+}

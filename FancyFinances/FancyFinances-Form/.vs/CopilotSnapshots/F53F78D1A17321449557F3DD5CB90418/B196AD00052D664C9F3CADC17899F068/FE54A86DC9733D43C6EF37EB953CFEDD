@@ -1,0 +1,321 @@
+﻿namespace FancyFinances_Form
+{
+    partial class frmFinance
+    {
+        /// <summary>
+        ///  Required designer variable.
+        /// </summary>
+        private System.ComponentModel.IContainer components = null;
+
+        /// <summary>
+        ///  Clean up any resources being used.
+        /// </summary>
+        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing && (components != null))
+            {
+                components.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+        #region Windows Form Designer generated code
+
+        /// <summary>
+        ///  Required method for Designer support - do not modify
+        ///  the contents of this method with the code editor.
+        /// </summary>
+        private void InitializeComponent()
+        {
+            components = new System.ComponentModel.Container();
+            tbcPages = new TabControl();
+            tbpSummary = new TabPage();
+            label4 = new Label();
+            label3 = new Label();
+            label2 = new Label();
+            label1 = new Label();
+            pnlRecentTransaction = new Panel();
+            panel1 = new Panel();
+            lblWelcome = new Label();
+            btnIncome = new Button();
+            btnExpenses = new Button();
+            btnSavings = new Button();
+            tbpGoals = new TabPage();
+            btnAddGoal = new Button();
+            panel2 = new Panel();
+            btnAdd1 = new Button();
+            lblGoal1 = new Label();
+            pgbGoalAmount = new ProgressBar();
+            tbpTracking = new TabPage();
+            toolTip1 = new ToolTip(components);
+            tbcPages.SuspendLayout();
+            tbpSummary.SuspendLayout();
+            panel1.SuspendLayout();
+            tbpGoals.SuspendLayout();
+            panel2.SuspendLayout();
+            SuspendLayout();
+            // 
+            // tbcPages
+            // 
+            tbcPages.Controls.Add(tbpSummary);
+            tbcPages.Controls.Add(tbpGoals);
+            tbcPages.Controls.Add(tbpTracking);
+            tbcPages.Location = new Point(-4, 0);
+            tbcPages.Name = "tbcPages";
+            tbcPages.SelectedIndex = 0;
+            tbcPages.Size = new Size(807, 456);
+            tbcPages.TabIndex = 0;
+            // 
+            // tbpSummary
+            // 
+            tbpSummary.BackColor = Color.Silver;
+            tbpSummary.Controls.Add(label4);
+            tbpSummary.Controls.Add(label3);
+            tbpSummary.Controls.Add(label2);
+            tbpSummary.Controls.Add(label1);
+            tbpSummary.Controls.Add(pnlRecentTransaction);
+            tbpSummary.Controls.Add(panel1);
+            tbpSummary.Controls.Add(btnIncome);
+            tbpSummary.Controls.Add(btnExpenses);
+            tbpSummary.Controls.Add(btnSavings);
+            tbpSummary.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbpSummary.Location = new Point(4, 24);
+            tbpSummary.Name = "tbpSummary";
+            tbpSummary.Padding = new Padding(3);
+            tbpSummary.Size = new Size(799, 428);
+            tbpSummary.TabIndex = 0;
+            tbpSummary.Text = "Summary";
+            // 
+            // label4
+            // 
+            label4.AutoSize = true;
+            label4.Location = new Point(3, 308);
+            label4.Name = "label4";
+            label4.Size = new Size(191, 25);
+            label4.TabIndex = 8;
+            label4.Text = "Total Income Amount";
+            // 
+            // label3
+            // 
+            label3.AutoSize = true;
+            label3.Location = new Point(3, 189);
+            label3.Name = "label3";
+            label3.Size = new Size(206, 25);
+            label3.TabIndex = 7;
+            label3.Text = "Total Expenses Amount";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(3, 70);
+            label2.Name = "label2";
+            label2.Size = new Size(193, 25);
+            label2.TabIndex = 6;
+            label2.Text = "Total Savings Amount";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Segoe UI", 18F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(248, 146);
+            label1.Name = "label1";
+            label1.Size = new Size(223, 32);
+            label1.TabIndex = 5;
+            label1.Text = "Recent Transactions";
+            // 
+            // pnlRecentTransaction
+            // 
+            pnlRecentTransaction.BackColor = Color.White;
+            pnlRecentTransaction.BorderStyle = BorderStyle.Fixed3D;
+            pnlRecentTransaction.Location = new Point(248, 194);
+            pnlRecentTransaction.Name = "pnlRecentTransaction";
+            pnlRecentTransaction.Size = new Size(548, 228);
+            pnlRecentTransaction.TabIndex = 4;
+            // 
+            // panel1
+            // 
+            panel1.BackColor = Color.White;
+            panel1.BorderStyle = BorderStyle.Fixed3D;
+            panel1.Controls.Add(lblWelcome);
+            panel1.Location = new Point(3, 6);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(793, 61);
+            panel1.TabIndex = 3;
+            // 
+            // lblWelcome
+            // 
+            lblWelcome.AutoSize = true;
+            lblWelcome.Font = new Font("Segoe UI", 20.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblWelcome.Location = new Point(9, 20);
+            lblWelcome.Name = "lblWelcome";
+            lblWelcome.Size = new Size(136, 37);
+            lblWelcome.TabIndex = 0;
+            lblWelcome.Text = "Welcome";
+            // 
+            // btnIncome
+            // 
+            btnIncome.Location = new Point(3, 334);
+            btnIncome.Name = "btnIncome";
+            btnIncome.Size = new Size(239, 88);
+            btnIncome.TabIndex = 2;
+            btnIncome.Text = "R0";
+            toolTip1.SetToolTip(btnIncome, "Go to the tracking view");
+            btnIncome.UseVisualStyleBackColor = true;
+            // 
+            // btnExpenses
+            // 
+            btnExpenses.Location = new Point(3, 217);
+            btnExpenses.Name = "btnExpenses";
+            btnExpenses.Size = new Size(239, 88);
+            btnExpenses.TabIndex = 1;
+            btnExpenses.Text = "R0";
+            toolTip1.SetToolTip(btnExpenses, "Go to the tracking view");
+            btnExpenses.UseVisualStyleBackColor = true;
+            // 
+            // btnSavings
+            // 
+            btnSavings.Location = new Point(3, 98);
+            btnSavings.Name = "btnSavings";
+            btnSavings.Size = new Size(239, 88);
+            btnSavings.TabIndex = 0;
+            btnSavings.Tag = "";
+            btnSavings.Text = "R0";
+            toolTip1.SetToolTip(btnSavings, "Add to Savings Balance");
+            btnSavings.UseVisualStyleBackColor = true;
+            btnSavings.Click += btnSavings_Click;
+            // 
+            // tbpGoals
+            // 
+            tbpGoals.BackColor = Color.Silver;
+            tbpGoals.Controls.Add(btnAddGoal);
+            tbpGoals.Controls.Add(flpGoals);
+            tbpGoals.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            tbpGoals.Location = new Point(4, 24);
+            tbpGoals.Name = "tbpGoals";
+            tbpGoals.Padding = new Padding(3);
+            tbpGoals.Size = new Size(799, 428);
+            tbpGoals.TabIndex = 1;
+            tbpGoals.Text = "Goals";
+            // 
+            // btnAddGoal
+            // 
+            btnAddGoal.Location = new Point(12, 81);
+            btnAddGoal.Name = "btnAddGoal";
+            btnAddGoal.Size = new Size(98, 27);
+            btnAddGoal.TabIndex = 1;
+            btnAddGoal.Text = "Add Goal";
+            btnAddGoal.UseVisualStyleBackColor = true;
+            btnAddGoal.Click += btnAddGoal_Click;
+            // 
+            // flpGoals
+            // 
+            flpGoals = new FlowLayoutPanel();
+            flpGoals.AutoScroll = true;
+            flpGoals.FlowDirection = FlowDirection.TopDown;
+            flpGoals.WrapContents = false;
+            flpGoals.BackColor = Color.White;
+            flpGoals.BorderStyle = BorderStyle.Fixed3D;
+            flpGoals.Location = new Point(0, 8);
+            flpGoals.Name = "flpGoals";
+            flpGoals.Size = new Size(796, 300);
+            flpGoals.TabIndex = 0;
+
+            // goalPanel1 (initial sample goal)
+            // 
+            goalPanel1 = new Panel();
+            goalPanel1.BackColor = Color.White;
+            goalPanel1.BorderStyle = BorderStyle.Fixed3D;
+            goalPanel1.Controls.Add(btnAdd1);
+            goalPanel1.Controls.Add(lblGoal1);
+            goalPanel1.Controls.Add(pgbGoalAmount);
+            goalPanel1.Location = new Point(0, 0);
+            goalPanel1.Name = "goalPanel1";
+            goalPanel1.Size = new Size(796, 67);
+            goalPanel1.TabIndex = 0;
+
+            flpGoals.Controls.Add(goalPanel1);
+            // 
+            // btnAdd1
+            // 
+            btnAdd1.Location = new Point(694, 5);
+            btnAdd1.Name = "btnAdd1";
+            btnAdd1.Size = new Size(94, 30);
+            btnAdd1.TabIndex = 2;
+            btnAdd1.Text = "Add Money";
+            btnAdd1.UseVisualStyleBackColor = true;
+            // 
+            // lblGoal1
+            // 
+            lblGoal1.AutoSize = true;
+            lblGoal1.Location = new Point(6, 9);
+            lblGoal1.Name = "lblGoal1";
+            lblGoal1.Size = new Size(119, 20);
+            lblGoal1.TabIndex = 1;
+            lblGoal1.Text = "Save for Holiday";
+            // 
+            // pgbGoalAmount
+            // 
+            pgbGoalAmount.Location = new Point(6, 37);
+            pgbGoalAmount.Name = "pgbGoalAmount";
+            pgbGoalAmount.Size = new Size(782, 23);
+            pgbGoalAmount.TabIndex = 0;
+            pgbGoalAmount.Tag = "";
+            // 
+            // tbpTracking
+            // 
+            tbpTracking.BackColor = Color.Silver;
+            tbpTracking.Location = new Point(4, 24);
+            tbpTracking.Name = "tbpTracking";
+            tbpTracking.Padding = new Padding(3);
+            tbpTracking.Size = new Size(799, 428);
+            tbpTracking.TabIndex = 2;
+            tbpTracking.Text = "Tracking";
+            // 
+            // frmFinance
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            BackColor = Color.Silver;
+            ClientSize = new Size(800, 450);
+            Controls.Add(tbcPages);
+            Name = "frmFinance";
+            StartPosition = FormStartPosition.CenterScreen;
+            Text = "Fancy Finances";
+            Load += frmFinance_Load;
+            tbcPages.ResumeLayout(false);
+            tbpSummary.ResumeLayout(false);
+            tbpSummary.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            tbpGoals.ResumeLayout(false);
+            goalPanel1.ResumeLayout(false);
+            goalPanel1.PerformLayout();
+            ResumeLayout(false);
+        }
+
+        #endregion
+
+        private TabControl tbcPages;
+        private TabPage tbpSummary;
+        private TabPage tbpGoals;
+        private Button btnIncome;
+        private Button btnExpenses;
+        private Button btnSavings;
+        private Panel pnlRecentTransaction;
+        private Panel panel1;
+        private TabPage tbpTracking;
+        private Label lblWelcome;
+        private Label label1;
+        private FlowLayoutPanel flpGoals;
+        private Panel goalPanel1;
+        private Button btnAdd1;
+        private Label lblGoal1;
+        private ProgressBar pgbGoalAmount;
+        private Button btnAddGoal;
+        private Label label4;
+        private Label label3;
+        private Label label2;
+        private ToolTip toolTip1;
+    }
+}

@@ -1,0 +1,14 @@
+using System;
+
+namespace FancyFinances_Form.Models
+{
+    public class Budget
+    {
+        public int BudgetID { get; set; }
+        public decimal? Savings { get; set; }
+        public decimal? Expenses { get; set; }
+        public decimal? Income { get; set; }
+        // Shared primary key relationship: BudgetID is also the FK to Users.UserID
+        public Users? User { get; set; }
+    }
+}

@@ -1,0 +1,125 @@
+﻿using Microsoft.EntityFrameworkCore.Internal;
+using System;
+using System.Collections.Generic;
+using System.Text;
+using Microsoft.EntityFrameworkCore;
+using FancyFinances_Form.Models;
+using System.Linq;
+using System.Windows.Forms;
+using Microsoft.VisualBasic;
+
+namespace FancyFinances_Form
+{
+    public class BudgetHelper
+    {
+        private readonly IDbContextFactory<AppDbContext> _contextFactory;
+        private readonly Users _currentUser;
+
+        public BudgetHelper(IDbContextFactory<AppDbContext> contextFactory, Users user)
+        {
+            _contextFactory = contextFactory;
+            _currentUser = user;
+        }
+
+        public decimal BudgetDisplay(string type)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+
+            if (type == "Income")
+            {
+                var totalIncome = ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Income ?? 0m)
+                .SumAsync(); 
+                return totalIncome.Result;
+            }
+            else if (type == "Expenses")
+            {
+                var totalExpenses =  ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Expenses ?? 0m)
+                .SumAsync();
+                return totalExpenses.Result;
+            }
+            else if (type == "Savings")
+            {
+                var totalSavings =  ctx.Budgets
+                .Where(b => b.BudgetID == _currentUser.UserID)
+                .Select(b => b.Savings ?? 0m)
+                .SumAsync();
+                return totalSavings.Result;
+            }
+            else
+            {
+                MessageBox.Show("Invalid type specified for BudgetDisplay.");
+                return 0;
+            }
+        }
+        private void UpdateBudget(string Type, int Amount)
+        {
+            var ctx = _contextFactory.CreateDbContext();
+            ctx.Budgets.Where(b => b.BudgetID == _currentUser.UserID).ToList().ForEach(b =>
+            {
+                if (Type == "Expenses")
+                {
+                    b.Expenses = (b.Expenses ?? 0) + Amount;
+                }
+                else if (Type == "Income")
+                {
+                    b.Income = (b.Income ?? 0) + Amount;
+                }
+                else if (Type == "Savings")
+                {
+                    b.Savings = (b.Savings ?? 0) + Amount;
+                }
+            });
+
+            ctx.SaveChanges();
+        }
+        public string AddInOrOut(string Type, int Amount, string Description, DateTime time)
+        {
+            using var ctx = _contextFactory.CreateDbContext();
+            if (Type == "Expenses")
+            {
+                var totalExpenses = ctx.Budgets
+                    .Where(b => b.BudgetID == _currentUser.UserID)
+                    .Select(b => b.Expenses ?? 0m)
+                    .Sum();
+                totalExpenses += Amount;
+                UpdateBudget("Expenses", Amount);
+                BudgetDisplay("Expenses");
+                AppendTransactionFile(new Models.FileTransaction { UserID = _currentUser.UserID, Time = time, Type = Type, Amount = Amount, Description = Description });
+                return $" {time:HH:mm:ss} Expense Added: R{Amount} - {Description}, New total: R{totalExpenses:N2}\n";
+            }
+            else if (Type == "Income")
+            {
+                var totalIncome = ctx.Budgets
+                    .Where(b => b.BudgetID == _currentUser.UserID)
+                    .Select(b => b.Income ?? 0m)
+                    .Sum();
+                totalIncome += Amount;
+                UpdateBudget("Income", Amount);
+                BudgetDisplay("Income");
+                AppendTransactionFile(new Models.FileTransaction { UserID = _currentUser.UserID, Time = time, Type = Type, Amount = Amount, Description = Description });
+                return $" {time:HH:mm:ss} Income Added: R{Amount} - {Description}, New total: R{totalIncome:N2}\n";
+            }
+            else if (Type == "Savings")
+            {
+                var totalSavings = ctx.Budgets
+                    .Where(b => b.BudgetID == _currentUser.UserID)
+                    .Select(b => b.Savings ?? 0m)
+                    .Sum();
+                totalSavings += Amount;
+                UpdateBudget("Savings", Amount);
+                BudgetDisplay("Savings");
+                AppendTransactionFile(new Models.FileTransaction { UserID = _currentUser.UserID, Time = time, Type = Type, Amount = Amount, Description = Description });
+                return $" {time:HH:mm:ss} Savings Added: R{Amount} - {Description}, New total: R{totalSavings:N2}\n";
+            }
+            else
+            {
+                throw new ArgumentException("Invalid type specified for AddInOrOut.");
+            }
+        }
+
+    }
+}
